@@ -3,6 +3,7 @@ import {QUERY_USERS_URL} from '../../../const.ts';
 import {useListState} from '@mantine/hooks';
 import {UserInfo} from '../types.ts';
 import {useEffect} from 'react';
+import {v4 as uuid} from 'uuid';
 
 export function useUsers(queryKey = ['users']) {
     const [users, usersHandler] = useListState<UserInfo>();
@@ -20,7 +21,9 @@ export function useUsers(queryKey = ['users']) {
         if (!results.data?.results) {
             return;
         }
-        usersHandler.setState(results.data.results);
+
+        const uniqueUsers = ensureUniqueUsers(results.data.results);
+        usersHandler.setState(uniqueUsers);
     }, [results.data?.results]);
 
     return {
@@ -28,4 +31,15 @@ export function useUsers(queryKey = ['users']) {
         users,
         usersHandler
     };
+}
+
+
+function ensureUniqueUsers(users: UserInfo[]) {
+    return users.map((x: UserInfo) => ({
+        ...x,
+        id: {
+            name: x.id.name,
+            value: uuid().slice(0, 10)
+        }
+    }));
 }
