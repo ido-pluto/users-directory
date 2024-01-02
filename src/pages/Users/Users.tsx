@@ -18,7 +18,7 @@ export function Users() {
     const [editModelOpened, editModelOpenedHealer] = useDisclosure(false);
 
     return <WebsiteLayout>
-        <Title order={1} mb={30}>Search User</Title>
+        <Title order={1} mb={30}>Users</Title>
         <EditUser key={userMutations.lastSave} newUser={true} opened={editModelOpened} close={editModelOpenedHealer.close} userMutations={userMutations}/>
 
         <Flex justify="end">
